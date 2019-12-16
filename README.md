@@ -4,6 +4,8 @@
 [spring文档](https://spring.io.guides)
 
 [springboot 集成mybatis](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/index.html)
+
+[Flayway数据库控制工具](https://flywaydb.org/)
 ## 按照bootstrap模版创建一个导航栏
 
 ## 脚本
