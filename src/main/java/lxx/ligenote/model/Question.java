@@ -1,24 +1,25 @@
 package lxx.ligenote.model;
 
-/**
- * ClassName:Question
- * Package:lxx.ligenote.model
- * Description:
- *
- * @Date:2019/12/16 13:01
- * @Author:857251389@qq.com
- */
 public class Question {
     private Integer id;
+
     private String title;
-    private String description;
+
     private Long gmtCreate;
+
     private Long gmtModified;
+
     private Integer creator;
+
     private Integer commentCount;
+
     private Integer viewCount;
+
     private Integer likeCount;
+
     private String tag;
+
+    private String description;
 
     public Integer getId() {
         return id;
@@ -33,15 +34,7 @@ public class Question {
     }
 
     public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        this.title = title == null ? null : title.trim();
     }
 
     public Long getGmtCreate() {
@@ -97,6 +90,14 @@ public class Question {
     }
 
     public void setTag(String tag) {
-        this.tag = tag;
+        this.tag = tag == null ? null : tag.trim();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 }

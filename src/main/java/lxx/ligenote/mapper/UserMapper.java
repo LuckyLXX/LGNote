@@ -1,24 +1,33 @@
 package lxx.ligenote.mapper;
 
+import java.util.List;
 import lxx.ligenote.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import lxx.ligenote.model.UserExample;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
-/**
- * ClassName:UserMapper
- * Package:lxx.ligenote.mapper
- * Description:
- *
- * @Date:2019/12/11 20:30
- * @Author:857251389@qq.com
- */
-@Mapper
 public interface UserMapper {
-    @Insert("insert into USER (name,account_id,token,gmt_create,gmt_modified,avatar_url) values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
-    void insert(User user);
-    @Select("SELECT * FROM user WHERE token=#{value}")
-    User searchToken(String value);
-    @Select("SELECT * FROM user WHERE id=#{creator}")
-    User findById(Integer creator);
+    long countByExample(UserExample example);
+
+    int deleteByExample(UserExample example);
+
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(User record);
+
+    int insertSelective(User record);
+
+    List<User> selectByExampleWithRowbounds(UserExample example, RowBounds rowBounds);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }

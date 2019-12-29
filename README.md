@@ -8,6 +8,8 @@
 [Flayway数据库控制工具](https://flywaydb.org/)
 
 [Bootstrap网站](https://v3.bootcss.com/components/)
+
+[MyMatis Generateor](http://mybatis.org/generator/)
 ## 按照bootstrap模版创建一个导航栏
 
 ## 脚本
@@ -39,5 +41,7 @@ create table publish
 
 
 ```
-
+### bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 

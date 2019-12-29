@@ -24,3 +24,8 @@ body{
 .prefile .list{
     margin-top: 20px;
 }
+
+.icon_text{
+    color: #999;
+    font-size: 13px;
+}
