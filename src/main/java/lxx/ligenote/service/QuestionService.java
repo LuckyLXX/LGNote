@@ -2,6 +2,8 @@ package lxx.ligenote.service;
 
 import lxx.ligenote.dto.PageDTO;
 import lxx.ligenote.dto.QuestionDTO;
+import lxx.ligenote.exception.CustomizeErrorCode;
+import lxx.ligenote.exception.CustomizeException;
 import lxx.ligenote.mapper.QuestionMapper;
 import lxx.ligenote.mapper.UserMapper;
 import lxx.ligenote.model.Question;
@@ -84,7 +86,7 @@ public class QuestionService {
             Integer offset = size * (page - 1);
             QuestionExample example = new QuestionExample();
             example.createCriteria().andCreatorEqualTo(id);
-            List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset, size));
+            List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
             List<QuestionDTO> questionDTOList = new ArrayList<>();
             for (Question question : questionList) {
                 User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -100,20 +102,23 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
-        BeanUtils.copyProperties(question,questionDTO);
+        BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
 
     public void createOrUpdte(Question question) {
-        if(question.getId()==null){
+        if (question.getId() == null) {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insert(question);
-        }else {
+        } else {
             //更新
             Question updateQuestion = new Question();
             updateQuestion.setTitle(question.getTitle());
@@ -122,7 +127,10 @@ public class QuestionService {
             updateQuestion.setGmtModified(System.currentTimeMillis());
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExample(updateQuestion,example);
+            int update = questionMapper.updateByExample(updateQuestion, example);
+            if (update != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
