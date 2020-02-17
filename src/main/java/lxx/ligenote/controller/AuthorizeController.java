@@ -1,9 +1,7 @@
 package lxx.ligenote.controller;
 
-import com.sun.deploy.net.HttpResponse;
 import lxx.ligenote.dto.AccessTokenDTO;
 import lxx.ligenote.dto.GitHubUser;
-import lxx.ligenote.mapper.UserMapper;
 import lxx.ligenote.model.User;
 import lxx.ligenote.provider.GitHubProvider;
 import lxx.ligenote.service.UserService;

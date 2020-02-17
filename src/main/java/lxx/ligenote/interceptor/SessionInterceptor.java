@@ -3,6 +3,7 @@ package lxx.ligenote.interceptor;
 import lxx.ligenote.mapper.UserMapper;
 import lxx.ligenote.model.User;
 import lxx.ligenote.model.UserExample;
+import lxx.ligenote.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -22,10 +23,12 @@ import java.util.List;
  * @Author:857251389@qq.com
  */
 @Service
-public class SessinInterceptor implements HandlerInterceptor {
+public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,6 +43,8 @@ public class SessinInterceptor implements HandlerInterceptor {
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0) {
                         request.getSession().setAttribute("user", users.get(0));
+                        Long unreadCount = notificationService.unreadCount(users.get(0).getId());
+                        request.getSession().setAttribute("unreadCount",unreadCount);
                     }
                     break;
                 }

@@ -1,5 +1,6 @@
 package lxx.ligenote.controller;
 
+import lxx.ligenote.cache.TagCache;
 import lxx.ligenote.dto.QuestionDTO;
 import lxx.ligenote.mapper.QuestionMapper;
 import lxx.ligenote.mapper.UserMapper;
@@ -32,7 +33,8 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -40,7 +42,7 @@ public class PublishController {
     public String doPublish(@RequestParam(name = "title") String title,
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
-                            @RequestParam(name = "id") Integer id,
+                            @RequestParam(name = "id") Long id,
                             HttpServletRequest request,
                             Model model) {
 
@@ -61,13 +63,15 @@ public class PublishController {
     }
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name="id") Integer id,
+    public String edit(@PathVariable(name="id") Long id,
                        Model model){
         QuestionDTO questionDTO = questionService.getById(id);
         model.addAttribute("title",questionDTO.getTitle());
         model.addAttribute("description",questionDTO.getDescription());
         model.addAttribute("tag",questionDTO.getTag());
         model.addAttribute("id",questionDTO.getId());
+
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 }

@@ -2,13 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>发布</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css"
           th:href="@{/css/bootstrap-theme.min.css}"/>
     <link rel="stylesheet" type="text/css" href="/css/community.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/editormd.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/editormd.preview.min.css"/>
     <script th:src="@{/js/jquery-3.4.1.min.js}" type="application/javascript"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+    <script src="/js/editormd.js" type="application/javascript"></script>
+    <script src="/js/lib/marked.min.js" type="application/javascript"></script>
+    <script src="/js/lib/prettify.min.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:insert="~{navigation::nav}"></div>
@@ -21,15 +28,59 @@
                 <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题(简明扼要)</label>
-                    <input type="text" required=required class="form-control" id="title" name="title" placeholder="问题标题……" th:value="${title}">
+                    <input type="text" required=required class="form-control" id="title" name="title"
+                           placeholder="问题标题……" th:value="${title}">
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="question-editor">
                     <label for="description">问题补充(请参照右侧提示)</label>
-                    <textarea th:text="${description}" name="description" required=required class="form-control" id="description" cols="30" rows="10"></textarea>
+                    <textarea th:text="${description}" name="description" required=required class="form-control"
+                              id="description" cols="30" rows="10" style="display: none"></textarea>
                 </div>
+                <script type="text/javascript">
+                    $(function () {
+                        var editor = editormd("question-editor", {
+                            width  : "100%",
+                            height : 350,
+                            path: "/js/lib/",
+                            delay: 0,
+                            watch: false,
+                            placeholder: "请输入问题描述",
+                            imageUpload: true,
+                            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                            imageUploadURL: "/file/upload"
+                        });
+                    });
+                </script>
+                <!--输入标签-->
                 <div class="form-group">
-                    <label for="tag">添加标签</label>
-                    <input type="text" th:value="${tag}" required=required class="form-control" id="tag" name="tag" placeholder="添加标签，以，隔开">
+                    <label for="tag">添加标签:</label>
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
+                           autocomplete="off"
+                           placeholder="输入标签，以，号分隔"
+                           onclick="showSelectTag()">
+                    <div id="select-tag" class="publish-tag-tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
+                                th:class="${selectCategoryStat.first ? 'active':''}">
+                                <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
+                                   data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" th:id="${selectCategory.categoryName}"
+                                 th:each="selectCategory: ${tags}"
+                                 th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
+                                <span>
+                                    <span th:each="selectTag: ${selectCategory.tags}">
+                                    <span class="community-tag" onclick="selectTag(this)"
+                                          th:data-tag="${selectTag}"
+                                          th:text="${' '+selectTag}">
+                                    </span>
+                                </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success fr">
                     （成功）发布
@@ -49,16 +100,18 @@
 <script>
     function checkTitleNull() {
         this.style.borderColor = this.value == '' ? 'red' : 'green';
-        if(this.value == ''){
+        if (this.value == '') {
             var flag = false;
             return flag;
         }
 
     };
+
     function checkDescriptionNull() {
         this.style.borderColor = this.value == '' ? 'red' : 'green';
 
     };
+
     function checkTagNull() {
         this.style.borderColor = this.value == '' ? 'red' : 'green';
 
