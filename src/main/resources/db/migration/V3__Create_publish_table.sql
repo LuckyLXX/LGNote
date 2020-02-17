@@ -1,4 +1,4 @@
-create table QUESTION
+create table publish
 (
 	id int auto_increment primary key,
 	title varchar(50),
