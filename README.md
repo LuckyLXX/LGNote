@@ -1,5 +1,8 @@
 ## springboot 练习
 
+## 部署
+-yum update
+-yum install git
 ## 资料
 [spring文档](https://spring.io.guides)
 

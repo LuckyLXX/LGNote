@@ -1,5 +1,6 @@
 package lxx.ligenote.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import lxx.ligenote.dto.AccessTokenDTO;
 import lxx.ligenote.dto.GitHubUser;
 import lxx.ligenote.model.User;
@@ -25,6 +26,7 @@ import java.util.UUID;
  * @Author:857251389@qq.com
  */
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     private GitHubProvider gitHubProvider;
@@ -62,7 +64,7 @@ public class AuthorizeController {
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
         } else {
-
+            log.error("callback get githubUser,{}", gitHubUser);
             return "redirect:/";
         }
     }
