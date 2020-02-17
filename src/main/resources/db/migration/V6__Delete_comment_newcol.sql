@@ -1,1 +1,0 @@
-alter table COMMENT drop column new_column
